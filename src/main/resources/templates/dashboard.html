@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hospital OPD Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">Today OPD</p>
+            <h1>Patient Visit Queue</h1>
+        </div>
+        <div class="toolbar-actions">
+            <a th:if="${canDownloadReports}" class="button ghost" th:href="@{/reports/patients.xlsx}" download="hospital-opd-patients.xlsx">Download Excel</a>
+            <a th:if="${canDownloadReports}" class="button ghost" th:href="@{/reports/patients.pdf}" download="hospital-opd-patients.pdf">Download PDF</a>
+            <a th:if="${canRegister}" class="button" th:href="@{/register}">Register Patient</a>
+        </div>
+    </section>
+
+    <p th:if="${message}" class="alert" th:text="${message}"></p>
+
+    <section class="stats">
+        <article>
+            <span th:text="${registeredCount}">0</span>
+            <p>Waiting for nurse</p>
+        </article>
+        <article>
+            <span th:text="${pretestDoneCount}">0</span>
+            <p>Ready for doctor</p>
+        </article>
+        <article>
+            <span th:text="${checkupDoneCount}">0</span>
+            <p>Completed</p>
+        </article>
+    </section>
+
+    <section class="table-shell">
+        <table>
+            <thead>
+            <tr>
+                <th>Token</th>
+                <th>Patient</th>
+                <th>Department</th>
+                <th>Doctor</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="visit : ${visits}">
+                <td th:text="${visit.id}">1</td>
+                <td>
+                    <strong th:text="${visit.patient.fullName}">Patient</strong>
+                    <small th:text="${visit.patient.age + ' yrs, ' + visit.patient.gender}">34 yrs</small>
+                </td>
+                <td th:text="${visit.department}">General Medicine</td>
+                <td th:text="${visit.assignedDoctor}">Doctor</td>
+                <td><span class="status" th:text="${visit.status}">REGISTERED</span></td>
+                <td class="actions">
+                    <a th:href="@{/visits/{id}(id=${visit.id})}">View</a>
+                    <a th:if="${canUseNurseView}" th:href="@{/nurse/visits/{id}/pretest(id=${visit.id})}">Pre-test</a>
+                    <a th:if="${canUseDoctorView}" th:href="@{/doctor/visits/{id}/checkup(id=${visit.id})}">Checkup</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(visits)}">
+                <td colspan="6" class="empty">No OPD visits registered yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

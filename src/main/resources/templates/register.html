@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register Patient</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page narrow">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">Reception</p>
+            <h1>New Patient Registration</h1>
+        </div>
+    </section>
+
+    <form class="form-grid" th:action="@{/register}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <section class="panel">
+            <h2>Patient Details</h2>
+            <label>Full name
+                <input th:field="${patient.fullName}" required>
+                <small class="error" th:errors="${patient.fullName}"></small>
+            </label>
+            <div class="two-col">
+                <label>Age
+                    <input type="number" min="0" th:field="${patient.age}" required>
+                    <small class="error" th:errors="${patient.age}"></small>
+                </label>
+                <label>Gender
+                    <select th:field="${patient.gender}" required>
+                        <option value="">Select</option>
+                        <option th:each="gender : ${genders}" th:value="${gender}" th:text="${gender}"></option>
+                    </select>
+                    <small class="error" th:errors="${patient.gender}"></small>
+                </label>
+            </div>
+            <div class="two-col">
+                <label>Phone
+                    <input th:field="${patient.phone}" required>
+                    <small class="error" th:errors="${patient.phone}"></small>
+                </label>
+                <label>Email
+                    <input type="email" th:field="${patient.email}">
+                    <small class="error" th:errors="${patient.email}"></small>
+                </label>
+            </div>
+            <label>Address
+                <textarea rows="3" th:field="${patient.address}"></textarea>
+            </label>
+        </section>
+
+        <section class="panel">
+            <h2>Visit Details</h2>
+            <div class="two-col">
+                <label>Department
+                    <input th:field="${visit.department}" required>
+                    <small class="error" th:errors="${visit.department}"></small>
+                </label>
+                <label>Assigned doctor
+                    <input th:field="${visit.assignedDoctor}">
+                </label>
+            </div>
+            <label>Chief complaint
+                <textarea rows="4" th:field="${visit.chiefComplaint}"></textarea>
+            </label>
+        </section>
+
+        <div class="form-actions">
+            <a class="button ghost" th:href="@{/}">Cancel</a>
+            <button class="button" type="submit">Create OPD Token</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

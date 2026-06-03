@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header" class="topbar">
+    <a class="brand" th:href="@{/}">Hospital OPD</a>
+    <nav>
+        <a th:href="@{/}">Dashboard</a>
+        <a th:if="${canUseNurseView}" th:href="@{/nurse}">Nurse View</a>
+        <a th:if="${canUseDoctorView}" th:href="@{/doctor}">Doctor View</a>
+        <a th:if="${canRegister}" class="primary-link" th:href="@{/register}">New Registration</a>
+        <form th:if="${isLoggedIn}" class="logout-form" th:action="@{/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <span th:text="${currentUsername}">user</span>
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+</header>
+</body>
+</html>

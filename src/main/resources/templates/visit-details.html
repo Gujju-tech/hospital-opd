@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Visit Details</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page narrow">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow" th:text="'OPD Token #' + ${visit.id}">OPD Token</p>
+            <h1 th:text="${visit.patient.fullName}">Patient</h1>
+        </div>
+        <span class="status large" th:text="${visit.status}">REGISTERED</span>
+    </section>
+
+    <section class="details-grid">
+        <article class="panel">
+            <h2>Patient</h2>
+            <p><strong>Age:</strong> <span th:text="${visit.patient.age}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${visit.patient.gender}"></span></p>
+            <p><strong>Phone:</strong> <span th:text="${visit.patient.phone}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${visit.patient.email} ?: '-'"></span></p>
+            <p><strong>Address:</strong> <span th:text="${visit.patient.address} ?: '-'"></span></p>
+        </article>
+        <article class="panel">
+            <h2>Visit</h2>
+            <p><strong>Department:</strong> <span th:text="${visit.department}"></span></p>
+            <p><strong>Doctor:</strong> <span th:text="${visit.assignedDoctor} ?: '-'"></span></p>
+            <p><strong>Complaint:</strong> <span th:text="${visit.chiefComplaint} ?: '-'"></span></p>
+        </article>
+        <article class="panel">
+            <h2>Nurse Pre-test</h2>
+            <p><strong>Temperature:</strong> <span th:text="${visit.temperatureCelsius} ?: '-'"></span></p>
+            <p><strong>Pulse:</strong> <span th:text="${visit.pulseRate} ?: '-'"></span></p>
+            <p><strong>BP:</strong> <span th:text="${visit.bloodPressure} ?: '-'"></span></p>
+            <p><strong>Weight:</strong> <span th:text="${visit.weightKg} ?: '-'"></span></p>
+            <p><strong>SpO2:</strong> <span th:text="${visit.oxygenSaturation} ?: '-'"></span></p>
+            <p><strong>Notes:</strong> <span th:text="${visit.nurseNotes} ?: '-'"></span></p>
+        </article>
+        <article class="panel">
+            <h2>Doctor Checkup</h2>
+            <p><strong>Diagnosis:</strong> <span th:text="${visit.diagnosis} ?: '-'"></span></p>
+            <p><strong>Medicines:</strong>
+                <span th:if="${visit.selectedMedicines.empty}">-</span>
+                <span th:each="medicine, iter : ${visit.selectedMedicines}"
+                      th:text="${medicine.name + ' ' + medicine.strength + (iter.last ? '' : ', ')}"></span>
+            </p>
+            <p><strong>Prescription:</strong> <span th:text="${visit.prescription} ?: '-'"></span></p>
+            <p><strong>Advice:</strong> <span th:text="${visit.doctorAdvice} ?: '-'"></span></p>
+        </article>
+    </section>
+</main>
+</body>
+</html>

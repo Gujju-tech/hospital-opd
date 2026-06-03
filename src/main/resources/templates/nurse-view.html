@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nurse View</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">Nurse Station</p>
+            <h1>Pre-test Queue</h1>
+        </div>
+    </section>
+
+    <section class="table-shell">
+        <table>
+            <thead>
+            <tr>
+                <th>Token</th>
+                <th>Patient</th>
+                <th>Complaint</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="visit : ${visits}">
+                <td th:text="${visit.id}">1</td>
+                <td>
+                    <strong th:text="${visit.patient.fullName}">Patient</strong>
+                    <small th:text="${visit.patient.age + ' yrs, ' + visit.patient.gender + ' | ' + visit.patient.phone}">Details</small>
+                </td>
+                <td th:text="${visit.chiefComplaint} ?: '-'">Complaint</td>
+                <td th:text="${visit.department}">Department</td>
+                <td class="actions">
+                    <a th:href="@{/nurse/visits/{id}/pretest(id=${visit.id})}">Enter vitals</a>
+                    <a th:href="@{/visits/{id}(id=${visit.id})}">View</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(visits)}">
+                <td colspan="5" class="empty">No patients are waiting for nurse pre-test.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

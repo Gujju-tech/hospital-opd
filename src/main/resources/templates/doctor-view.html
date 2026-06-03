@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Doctor View</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">Doctor Room</p>
+            <h1>Ready For Checkup</h1>
+        </div>
+    </section>
+
+    <p th:if="${message}" class="alert" th:text="${message}"></p>
+
+    <section class="table-shell">
+        <table>
+            <thead>
+            <tr>
+                <th>Token</th>
+                <th>Patient</th>
+                <th>Vitals</th>
+                <th>Complaint</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="visit : ${visits}">
+                <td th:text="${visit.id}">1</td>
+                <td>
+                    <strong th:text="${visit.patient.fullName}">Patient</strong>
+                    <small th:text="${visit.patient.age + ' yrs, ' + visit.patient.gender + ' | ' + visit.patient.phone}">Details</small>
+                </td>
+                <td>
+                    <strong th:text="(${visit.temperatureCelsius} ?: '-') + ' C, BP ' + (${visit.bloodPressure} ?: '-')">Vitals</strong>
+                    <small th:text="'Pulse ' + (${visit.pulseRate} ?: '-') + ', SpO2 ' + (${visit.oxygenSaturation} ?: '-')">More vitals</small>
+                </td>
+                <td th:text="${visit.chiefComplaint} ?: '-'">Complaint</td>
+                <td class="actions">
+                    <a th:href="@{/doctor/visits/{id}/checkup(id=${visit.id})}">Start checkup</a>
+                    <a th:href="@{/visits/{id}(id=${visit.id})}">View</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(visits)}">
+                <td colspan="5" class="empty">No patients are ready for doctor checkup.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
